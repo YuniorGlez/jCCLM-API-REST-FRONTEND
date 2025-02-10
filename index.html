@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-clases</title>
+
+    <script>
+        function obtenerUsuarios() {
+            // 1. Hacer una petición a la API
+            // 2. Esperar a que la respuesta llegue
+            // 3. Convertir la respuesta a JSON
+            // 4. Devolver el JSON
+            
+            // DO THE THINGS
+        }
+
+        function formatearUsuarios(usuarios) {
+            // 1. Recorrer el array de usuarios y crear un string con el nombre y el email de cada usuario
+            // 2. Devolver el string formateado
+
+            // DO THE THINGS
+
+            // Example:
+            /*const htmlResultado = ``;
+            const array = [{name: 'Juan', email: 'juan@gmail.com'}, {name: 'Ana', email: 'ana@gmail.com'}]
+            const resultado = array.forEach(usuario => {
+                htmlResultado += `
+                    <div>   
+                        <h2>${usuario.name}</h2>
+                        <p>${usuario.email}</p>
+                    </div>
+                `
+            })
+
+            return htmlResultado;*/
+               
+        }
+
+
+        function main() {
+            // 1. Llamar a la función obtenerUsuarios
+            // 2. Llamar a la función formatearUsuarios con el resultado de obtenerUsuarios
+            // 3. Mostrar el resultado de formatearUsuarios en el div con id resultados
+
+            // DO THE THINGS
+        }
+
+        main()
+    </script>
+</head>
+
+<body>
+    <h1>Pre-clases</h1>
+    <p>
+        Tu objetivo es obtener los usuarios de la API y mostrarlos en la pantalla. Para ello, debes seguir los siguientes pasos:
+    </p>
+    <ol>
+        <li>
+            Terminar de implementar la función obtenerUsuarios
+        </li>
+        <li>
+            Llamar a la función obtenerUsuarios
+        </li>
+        <li>
+            Mostrar los usuarios en la pantalla usando innerHTML y getElementById al div con id resultados
+        </li>
+        <li>
+            Extra: Hacer que cada botón llame a una función diferente para cargar los datos de la API que necesitemos
+        </li>
+    </ol>
+
+    <div class="buttons">
+        <button id="obtener-usuarios">Obtener usuarios</button>
+        <button id="obtener-todos">Obtener todos</button>
+        <button id="obtener-photos">Obtener photos</button>
+        <button id="obtener-albums">Obtener albums</button>
+    </div>
+
+    <div id="resultados"></div>
+</body>
+
+</html>
