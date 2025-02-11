@@ -5,80 +5,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicio día 1</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
 
-    <script>
-        function obtenerUsuarios() {
-            // 1. Hacer una petición a la API
-            // 2. Esperar a que la respuesta llegue
-            // 3. Convertir la respuesta a JSON
-            // 4. Devolver el JSON
-            
-            // DO THE THINGS
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./ai-assistant.js"></script>
 
-        function formatearUsuarios(usuarios) {
-            // 1. Recorrer el array de usuarios y crear un string con el nombre y el email de cada usuario
-            // 2. Devolver el string formateado
+    <script src="./script.js"></script>
 
-            // DO THE THINGS
-
-            // Example:
-            /*const htmlResultado = ``;
-            const array = [{name: 'Juan', email: 'juan@gmail.com'}, {name: 'Ana', email: 'ana@gmail.com'}]
-            const resultado = array.forEach(usuario => {
-                htmlResultado += `
-                    <div>   
-                        <h2>${usuario.name}</h2>
-                        <p>${usuario.email}</p>
-                    </div>
-                `
-            })
-
-            return htmlResultado;*/
-               
-        }
-
-
-        function main() {
-            // 1. Llamar a la función obtenerUsuarios
-            // 2. Llamar a la función formatearUsuarios con el resultado de obtenerUsuarios
-            // 3. Mostrar el resultado de formatearUsuarios en el div con id resultados
-
-            // DO THE THINGS
-        }
-
-        main()
     </script>
 </head>
 
 <body>
-    <h1>Ejercicio día 1.</h1>
-    <p>
-        Tu objetivo es obtener los usuarios de la API y mostrarlos en la pantalla. Para ello, debes seguir los siguientes pasos:
-    </p>
-    <ol>
-        <li>
-            Terminar de implementar la función obtenerUsuarios
-        </li>
-        <li>
-            Llamar a la función obtenerUsuarios
-        </li>
-        <li>
-            Mostrar los usuarios en la pantalla usando innerHTML y getElementById al div con id resultados
-        </li>
-        <li>
-            Extra: Hacer que cada botón llame a una función diferente para cargar los datos de la API que necesitemos
-        </li>
-    </ol>
+    <div class="container mx-auto p-4">
+        <h1>Ejercicio día 2.</h1>
+        <p>
+            Vamos a realizar todas las llamadas del tipo GET POST PATCH Y DELETE para practicar. A la siguiente API:
+            LINK
+        </p>
+        <ol class="mb-12">
+            <li>
+                Hacer una llamada GET para obtener todos los estudiantes
+            </li>
+            <li>
+                Hacer una llamada POST para crear un nuevo estudiante
+            </li>
+            <li>
+                Hacer una llamada PATCH para actualizar un estudiante
+            </li>
+            <li>
+                Hacer una llamada DELETE para borrar un estudiante
+            </li>
+        </ol>
 
-    <div class="buttons">
-        <button id="obtener-usuarios">Obtener usuarios</button>
-        <button id="obtener-todos">Obtener todos</button>
-        <button id="obtener-photos">Obtener photos</button>
-        <button id="obtener-albums">Obtener albums</button>
+        <form action="" id="formulario-alta" onsubmit="return false;">
+            <input type="text" name="nombre" id="nombre" placeholder="Nombre">
+            <input type="text" name="email" id="email" placeholder="Email">
+            <input type="text" name="curso" id="curso" placeholder="Curso">
+            <input type="text" name="edad" id="edad" placeholder="Edad">
+            <button type="button" id="btn-crear-estudiante" onclick="crearEstudiante()">Crear estudiante</button>
+        </form>
+
+        <div id="resultados">
+
+        </div>
     </div>
-
-    <div id="resultados"></div>
 </body>
 
 </html>
