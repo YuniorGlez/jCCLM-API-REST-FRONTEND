@@ -19,10 +19,9 @@ const API_URL = 'https://retoolapi.dev/GTFjhg/students';
 function parseStudentsToHtml(students) {
     return students.map(student => `
                 <div class="estudiante">
-                    <h3>Nombre: ${student.nombre}</h3>
+                    <h3>Nombre: ${student.name}</h3>
                     <p>Email: ${student.email}</p>
-                    <p>Curso: ${student.curso}</p>
-                    <p>Edad: ${student.edad}</p>
+                    <p>Fecha de nacimiento: ${student.birthdate}</p>
                     <button type="button" onclick="deleteStudent(${student.id})">Borrar</button>
                 </div>
             `).join('');
