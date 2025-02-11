@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicio día 1</title>
 
@@ -12,35 +13,180 @@
                 .then(res => res.json())
         }
 
-        function formatearUsuarios(usuarios) {
-            let htmlResultado = ``;
-            usuarios.forEach(usuario => {
-                htmlResultado += `
-                    <div>   
-                        <h2>${usuario.name}</h2>
-                        <p>${usuario.email}</p>
-                    </div>
-                `
-            })
-            return htmlResultado;
+
+        function deleteStudent(id ){
+            return axios.delete('https://retoolapi.dev/GTFjhg/students/' + id)
+                .then(res => {
+                    actualizarPantalla();
+                })
         }
 
-        function main() {
+        function parseStudentsToHtml(students) {
+            return students.map(student => `
+                        <div class="estudiante">
+                            <h3>Nombre: ${student.name}</h3>
+                            <p>Email: ${student.email}</p>
+                            <p>Fecha de nacimiento: ${student.birthdate}</p>
+                            <button type="button" onclick="deleteStudent(${student.id})">Borrar</button>
+                        </div>
+                    `).join('');
+        }
+
+
+        function actualizarPantalla() {
             obtenerUsuarios()
                 .then(usuarios => {
                     const donde = document.getElementById('resultados');
-                    donde.innerHTML = formatearUsuarios(usuarios);
+                    donde.innerHTML = parseStudentsToHtml(usuarios);
                 })
         }
+
+        actualizarPantalla();
+
+
+        function leaLosInputsYDecuelvaComoResultadoUnStudent() {
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const birthdate = document.getElementById('birthdate').value;
+
+            const student = {
+                name: name,
+                email: email,
+                birthdate: birthdate
+            }
+
+            return student;
+
+        }
+
+
+        function guardarEnLaBD(algo) {
+            return axios.post('https://retoolapi.dev/GTFjhg/students', algo)
+                .then(response => response.data)
+        }
+
+        function createStudent() {
+            const newStudent = leaLosInputsYDecuelvaComoResultadoUnStudent();
+            guardarEnLaBD(newStudent)
+                .then(result => {
+                    console.log({ result });
+                    actualizarPantalla(); // AQUI SI !!! 
+                })
+                
+            // actualizarPantalla();// AQUI NO !!! 
+
+
+
+
+
+
+
+
+
+
+
+
+
+            function actualizarMuro(nuevoTweet){
+                // do things
+                // dibujar este tweet nuevo porque lo publicó el 
+                // usuario
+                // nuevoTweet 
+            }
+
+
+            function publicarNuevoTweet(nuevoTweet){
+                // do things
+            }
+
+
+            // usaurio escribiendo: jahahjdioajdiajidj aijdiasdihasd 
+
+            // usuario pincha en enviar 
+                
+
+            // esto es correcto
+            // publicarNuevoTweet('Este es mi tweet super guay')
+            // .then(result => {
+            //    actualizarMuro(result.texto);
+            // })
+            
+            
+            // esto esta mal 
+            // publicarNuevoTweet('Este es mi tweet super guay')
+            // actualizarMuro('Este es mi tweet super guay');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            llamadaAPI()
+                .then(res => console.log('1'))
+
+            llamadaAPI()
+                .then(res => console.log('2'))
+
+            llamadaAPI()
+                .then(res => console.log('3'))
+
+            llamadaAPI()
+                .then(res => console.log('4'))
+
+            llamadaAPI()
+                .then(res => console.log('5'))
+
+            console.log('6')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+
         
-        main();
+
     </script>
 </head>
 
 <body>
     <h1>Ejercicio día 1.</h1>
     <p>
-        Tu objetivo es obtener los usuarios de la API y mostrarlos en la pantalla. Para ello, debes seguir los siguientes pasos:
+        Tu objetivo es obtener los usuarios de la API y mostrarlos en la pantalla. Para ello, debes seguir los
+        siguientes pasos:
     </p>
     <ol>
         <li>
@@ -57,12 +203,13 @@
         </li>
     </ol>
 
-    <div class="buttons">
-        <button id="obtener-usuarios">Obtener usuarios</button>
-        <button id="obtener-todos">Obtener todos</button>
-        <button id="obtener-photos">Obtener photos</button>
-        <button id="obtener-albums">Obtener albums</button>
-    </div>
+
+    <form action="" id="formulario-alta" onsubmit="return false;">
+        <input type="text" name="name" id="name" placeholder="Nombre">
+        <input type="text" name="email" id="email" placeholder="Email">
+        <input type="text" name="birthdate" id="birthdate" placeholder="Fecha de nacimiento">
+        <button type="button" id="btn-crear-estudiante" onclick="createStudent()">Crear estudiante</button>
+    </form>
 
     <div id="resultados"></div>
 </body>
