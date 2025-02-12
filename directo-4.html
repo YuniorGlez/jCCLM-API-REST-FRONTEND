@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Ejercicio día 1</title>
+
+    <script>
+
+        let modoEdicionActiva = false;
+        let quienSeQuiereEditar;
+
+        let copiaDeUsuarios;
+
+        let api_url = 'https://retoolapi.dev/GTFjhg/students';
+
+
+
+        function obtenerUsuarios() {
+            return fetch(api_url)
+                .then(res => res.json())
+        }
+
+
+        function deleteStudent(id) {
+            return axios.delete(api_url + '/' + id)
+                .then(res => {
+                    actualizarPantalla();
+                })
+        }
+
+
+        function cambiarAModoEdicion(idDelQueSeEditará) {
+            modoEdicionActiva = true;
+            cambiarTextoBoton('Guardar cambios');
+            quienSeQuiereEditar = idDelQueSeEditará;
+        }
+        function cambiarAModoAñadir() {
+            modoEdicionActiva = false;
+            cambiarTextoBoton('Crear estudiante');
+            quienSeQuiereEditar = null;
+        }
+
+        function preseleccionarParaEditar(id) {
+            // El usuario ha indicado, que quiere entrar en modo edición, para editar al ID = id 
+            // Paso 1. Indicarnos en algun sitio, que estamos en modo edicion 
+            cambiarAModoEdicion(id)
+            // Paso 2. Copiar en los campos del formulario de arriba los campos de este usuario
+            const find = copiaDeUsuarios.find(usuario => usuario.id === id);
+
+            document.getElementById('name').value = find.name;
+            document.getElementById('email').value = find.email;
+            document.getElementById('birthdate').value = find.birthdate;
+
+        }
+
+        function editOrCreateNewStudent() {
+            if (modoEdicionActiva === false) {
+                createStudent()
+            } else {
+                editStudent();
+            }
+        }
+
+
+
+
+
+        function parseStudentsToHtml(students) {
+            return students.map(student => `
+                        <div class="estudiante my-6">
+                            <h3>Nombre: ${student.name} </h3>
+                            <p>Email: ${student.email}</p>
+                            <p>Fecha de nacimiento: ${student.birthdate}</p>
+                            <button type="button" onclick="deleteStudent(${student.id})">Borrar</button> <button class="btn" style="cursor:pointer" onclick="preseleccionarParaEditar(${student.id})">Seleccionar para editar</button> 
+                        </div>
+                    `).join('');
+        }
+
+
+        function actualizarPantalla() {
+            obtenerUsuarios()
+                .then(usuarios => {
+                    const donde = document.getElementById('resultados');
+                    copiaDeUsuarios = usuarios;
+                    donde.innerHTML = parseStudentsToHtml(usuarios);
+                })
+        }
+
+        actualizarPantalla();
+
+        function leaLosInputsYDevuelvaComoResultadoUnStudent() {
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const birthdate = document.getElementById('birthdate').value;
+
+            const student = {
+                name: name,
+                email: email,
+                birthdate: birthdate
+            }
+
+            return student;
+
+        }
+
+        function guardarEnLaBD(algo) {
+            return axios.post(api_url, algo)
+                .then(response => response.data)
+        }
+
+        function createStudent() {
+            const newStudent = leaLosInputsYDevuelvaComoResultadoUnStudent();
+            guardarEnLaBD(newStudent)
+                .then(result => {
+                    vaciandoElFormulario();
+                    actualizarPantalla(); // AQUI SI !!! 
+                })
+        }
+
+
+        // Hacer un PUT a la api, y dejar la app en modo AÑADIR y no edicion 
+        function editStudent() {
+            const newStudent = leaLosInputsYDevuelvaComoResultadoUnStudent();
+
+            axios.put(api_url + '/' + quienSeQuiereEditar, newStudent)
+                .then(res => {
+                    cambiarAModoAñadir();
+                    vaciandoElFormulario();
+                    actualizarPantalla();
+                })
+        }
+
+        function vaciandoElFormulario() {
+            document.getElementById('name').value = "";
+            document.getElementById('email').value = "";
+            document.getElementById('birthdate').value = "";
+        }
+
+
+        function cambiarTextoBoton(texto) {
+            document.getElementById('btn-crear-estudiante').innerText = texto;
+        }
+
+
+
+
+    </script>
+</head>
+
+<body>
+    <h1>Ejercicio día 1.</h1>
+    <p>
+        Tu objetivo es obtener los usuarios de la API y mostrarlos en la pantalla. Para ello, debes seguir los
+        siguientes pasos:
+    </p>
+    <ol>
+        <li>
+            Terminar de implementar la función obtenerUsuarios
+        </li>
+        <li>
+            Llamar a la función obtenerUsuarios
+        </li>
+        <li>
+            Mostrar los usuarios en la pantalla usando innerHTML y getElementById al div con id resultados
+        </li>
+        <li>
+            Extra: Hacer que cada botón llame a una función diferente para cargar los datos de la API que necesitemos
+        </li>
+    </ol>
+
+
+    <form class="my-6" action="" id="formulario-alta" onsubmit="return false;">
+        <input type="text" name="name" id="name" placeholder="Nombre">
+        <input type="text" name="email" id="email" placeholder="Email">
+        <input type="text" name="birthdate" id="birthdate" placeholder="Fecha de nacimiento">
+        <button class="" type="button" id="btn-crear-estudiante" onclick="editOrCreateNewStudent()">Crear
+            estudiante</button>
+    </form>
+
+    <div id="resultados"></div>
+</body>
+
+</html>

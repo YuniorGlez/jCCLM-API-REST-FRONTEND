@@ -21,12 +21,36 @@
                 })
         }
 
+        function editarNombreDe(id){
+            // El usuario quiere editar el campo name del que tiene el ID = id 
+                // Para esto, tendré que:
+                    // Solicitarle al usuario el nuevo nombre
+            const name = prompt("Dime el nuevo nombre");
+                    // Pedirle a la api que esto se aplique
+            axios.patch( `https://retoolapi.dev/GTFjhg/students/${id}`, { name : name } )
+                .then(response => { actualizarPantalla() } )
+                    // Refrescar la pantalla
+        }
+
+        function editarEmailDe(id){
+            const emailNuevoIndicadoPorElUsario = prompt("Dime el nuevo correo");
+            axios.patch( `https://retoolapi.dev/GTFjhg/students/${id}`, { email : emailNuevoIndicadoPorElUsario } )
+                .then(response => { actualizarPantalla() } )
+        }
+
+
+        function editarBirthdateDe(id){
+            const birthdateNuevoIndicadoPorElUsario = prompt("Dime la nueva fecha de nacimiento");
+            axios.patch( `https://retoolapi.dev/GTFjhg/students/${id}`, { birthdate : birthdateNuevoIndicadoPorElUsario } )
+                .then(response => { actualizarPantalla() } )
+        }
+
         function parseStudentsToHtml(students) {
             return students.map(student => `
                         <div class="estudiante">
-                            <h3>Nombre: ${student.name}</h3>
-                            <p>Email: ${student.email}</p>
-                            <p>Fecha de nacimiento: ${student.birthdate}</p>
+                            <h3>Nombre: ${student.name}<span style="cursor:pointer" onclick="editarNombreDe(${student.id})">✏️</span> </h3>
+                            <p>Email: ${student.email}<span style="cursor:pointer" onclick="editarEmailDe(${student.id})">✏️</span></p>
+                            <p>Fecha de nacimiento: ${student.birthdate}<span style="cursor:pointer" onclick="editarBirthdateDe(${student.id})">✏️</span></p>
                             <button type="button" onclick="deleteStudent(${student.id})">Borrar</button>
                         </div>
                     `).join('');
@@ -43,7 +67,6 @@
 
         actualizarPantalla();
 
-
         function leaLosInputsYDecuelvaComoResultadoUnStudent() {
 
             const name = document.getElementById('name').value;
@@ -59,7 +82,6 @@
             return student;
 
         }
-
 
         function guardarEnLaBD(algo) {
             return axios.post('https://retoolapi.dev/GTFjhg/students', algo)

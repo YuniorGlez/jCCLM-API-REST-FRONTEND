@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Ejercicio día 1</title>
+
+    <script>
+        function obtenerUsuarios() {
+            return fetch('https://retoolapi.dev/GTFjhg/students')
+                .then(res => res.json())
+        }
+
+
+        function deleteStudent(id ){
+            return axios.delete('https://retoolapi.dev/GTFjhg/students/' + id)
+                .then(res => {
+                    actualizarPantalla();
+                })
+        }
+
+
+        /* MEJORABLE, podríamos haber usado el método que ya tenemos
+        function editarAlUsuario(id){
+
+            // Recoger los valores del form de arriba y hacer ese update
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const birthdate = document.getElementById('birthdate').value;
+
+            axios.put('https://retoolapi.dev/GTFjhg/students/' + id, { name : name , email : email, birthdate : birthdate })
+                .then(res => {actualizarPantalla()})
+
+
+        }
+
+        */
+        function editarAlUsuario(id){
+            // Recoger los valores del form de arriba y hacer ese update
+            const body = leaLosInputsYDevuelvaComoResultadoUnStudent();
+            axios.put('https://retoolapi.dev/GTFjhg/students/' + id, body)
+                .then(res => {actualizarPantalla()})
+        }
+
+
+        function parseStudentsToHtml(students) {
+            return students.map(student => `
+                        <div class="estudiante my-6">
+                            <h3>Nombre: ${student.name} </h3>
+                            <p>Email: ${student.email}</p>
+                            <p>Fecha de nacimiento: ${student.birthdate}</p>
+                            <button type="button" onclick="deleteStudent(${student.id})">Borrar</button> <button class="btn" style="cursor:pointer" onclick="editarAlUsuario(${student.id})">Reemplazar datos con los del form</button> 
+                        </div>
+                    `).join('');
+        }
+
+
+        function actualizarPantalla() {
+            obtenerUsuarios()
+                .then(usuarios => {
+                    const donde = document.getElementById('resultados');
+                    donde.innerHTML = parseStudentsToHtml(usuarios);
+                })
+        }
+
+        actualizarPantalla();
+
+        function leaLosInputsYDevuelvaComoResultadoUnStudent() {
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const birthdate = document.getElementById('birthdate').value;
+
+            const student = {
+                name: name,
+                email: email,
+                birthdate: birthdate
+            }
+
+            return student;
+
+        }
+
+        function guardarEnLaBD(algo) {
+            return axios.post('https://retoolapi.dev/GTFjhg/students', algo)
+                .then(response => response.data)
+        }
+
+        function createStudent() {
+            const newStudent = leaLosInputsYDevuelvaComoResultadoUnStudent();
+            guardarEnLaBD(newStudent)
+                .then(result => {
+                    console.log({ result });
+                    actualizarPantalla(); // AQUI SI !!! 
+                })
+                
+
+
+        }
+
+
+        
+
+    </script>
+</head>
+
+<body>
+    <h1>Ejercicio día 1.</h1>
+    <p>
+        Tu objetivo es obtener los usuarios de la API y mostrarlos en la pantalla. Para ello, debes seguir los
+        siguientes pasos:
+    </p>
+    <ol>
+        <li>
+            Terminar de implementar la función obtenerUsuarios
+        </li>
+        <li>
+            Llamar a la función obtenerUsuarios
+        </li>
+        <li>
+            Mostrar los usuarios en la pantalla usando innerHTML y getElementById al div con id resultados
+        </li>
+        <li>
+            Extra: Hacer que cada botón llame a una función diferente para cargar los datos de la API que necesitemos
+        </li>
+    </ol>
+
+
+    <form class="my-6" action="" id="formulario-alta" onsubmit="return false;">
+        <input type="text" name="name" id="name" placeholder="Nombre">
+        <input type="text" name="email" id="email" placeholder="Email">
+        <input type="text" name="birthdate" id="birthdate" placeholder="Fecha de nacimiento">
+        <button type="button" id="btn-crear-estudiante" onclick="createStudent()">Crear estudiante</button>
+    </form>
+
+    <div id="resultados"></div>
+</body>
+
+</html>
